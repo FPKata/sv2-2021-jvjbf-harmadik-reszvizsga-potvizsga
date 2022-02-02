@@ -11,22 +11,22 @@ import java.util.TreeMap;
 
 public class ExamService {
     private Map<String, List<Integer>> results = new TreeMap<>();
-    private int max_theory = 0;
-    private int max_practice = 0;
+    private int theoryMax = 0;
+    private int practiceMax = 0;
 
     public Map<String, List<Integer>> getResults() {
         return results;
     }
 
-    public int getMax_theory() {
-        return max_theory;
+    public int getTheoryMax() {
+        return theoryMax;
     }
 
-    public int getMax_practice() {
-        return max_practice;
+    public int getPracticeMax() {
+        return practiceMax;
     }
 
-    public void readFromFile(Path path){
+    public void readFromFIle(Path path){
         boolean firstLine = true;
 
         try(BufferedReader br = Files.newBufferedReader(path)){
@@ -46,8 +46,8 @@ public class ExamService {
 
     private void parseLineFirst(String line) {
         String[] temp = line.split(" ");
-        max_theory = Integer.parseInt(temp[0]);
-        max_practice = Integer.parseInt(temp[1]);
+        theoryMax = Integer.parseInt(temp[0]);
+        practiceMax = Integer.parseInt(temp[1]);
     }
 
     private void parseLine(String line) {
@@ -64,7 +64,7 @@ public class ExamService {
     public List<String> findPeopleFailed(){
         List<String> failed = new ArrayList<>();
         for (Map.Entry<String, List<Integer>> actual : results.entrySet()) {
-            if (isFailed(actual.getValue().get(0), max_theory) || isFailed(actual.getValue().get(1), max_practice)) {
+            if (isFailed(actual.getValue().get(0), theoryMax) || isFailed(actual.getValue().get(1), practiceMax)) {
                 failed.add(actual.getKey());
             }
         }
@@ -82,7 +82,7 @@ public class ExamService {
         int max_sum = 0;
         String best = "";
         for (Map.Entry<String, List<Integer>> actual : results.entrySet()) {
-            if (!(isFailed(actual.getValue().get(0), max_theory) || isFailed(actual.getValue().get(1), max_practice))) {
+            if (!(isFailed(actual.getValue().get(0), theoryMax) || isFailed(actual.getValue().get(1), practiceMax))) {
                 if (actual.getValue().get(0) + actual.getValue().get(1) > max_sum){
                     best = actual.getKey();
                     max_sum = actual.getValue().get(0) + actual.getValue().get(1);
